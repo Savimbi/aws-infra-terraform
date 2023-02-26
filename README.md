@@ -1,8 +1,12 @@
-![Alt text](dorna- EC2-aws.png?raw=true "Architecture")
-Terraform will perform the following actions:
+## Terraform will create the following resources:
+This project is intend to build a an infrastructure on AWS.
+We are planning to create an EC2 instance in an VPC and host in us-east-1a as the bellow diagram shows.
 
+![Alt text](dorna-aws.png "Architecture")
+
+``` $ terraform plan ```
   # aws_instance.my-instance will be created
-  + resource "aws_instance" "my-instance" {
+  ```+ resource "aws_instance" "my-instance" {
       + ami                                  = "ami-065bb5126e4504910"
       + arn                                  = (known after apply)
       + associate_public_ip_address          = (known after apply)
@@ -157,7 +161,7 @@ Terraform will perform the following actions:
       + owner_id                             = (known after apply)
       + tags_all                             = (known after apply)
     }
-
+```
 Plan: 3 to add, 0 to change, 0 to destroy.
 
 Changes to Outputs:
@@ -168,7 +172,9 @@ Changes to Outputs:
 can't guarantee that exactly these actions will be performed if
 "terraform apply" is subsequently run.
 
-$ terraform apply --auto-approve
+
+ ``` $ terraform apply --auto-approve```
+
 module.vpc.aws_vpc.this: Creating...
 module.vpc.aws_vpc.this: Creation complete after 1s [id=vpc-018d5e62f731dd60a]
 module.vpc.aws_subnet.this: Creating...
@@ -182,4 +188,9 @@ Apply complete! Resources: 3 added, 0 changed, 0 destroyed.
 
 Outputs:
 
-PrivateIP = "10.0.1.52"
+  $ PrivateIP = "10.0.1.52"
+
+## Velify on AWS
+![Alt text](verify.png "Verification")
+
+Feel free to use this HCL code in your project. Thank you!
