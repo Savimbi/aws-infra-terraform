@@ -1,3 +1,4 @@
+![Alt text](dorna- EC2-aws.png?raw=true "Architecture")
 Terraform will perform the following actions:
 
   # aws_instance.my-instance will be created
