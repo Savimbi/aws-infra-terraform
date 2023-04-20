@@ -1,0 +1,82 @@
+@startuml VPC
+'Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+'SPDX-License-Identifier: MIT (For details, see https://github.com/awslabs/aws-icons-for-plantuml/blob/master/LICENSE)
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!include AWSPuml/AWSCommon.puml
+'!include AWSPuml/AWSSimplified.puml
+!include AWSPuml/Compute/EC2.puml
+!include AWSPuml/Compute/EC2ElasticIPAddress.puml
+!include AWSPuml/Compute/EC2Instance.puml
+!include AWSPuml/Groups/AWSCloud.puml
+!include AWSPuml/Groups/VPC.puml
+!include AWSPuml/Groups/AvailabilityZone.puml
+!include AWSPuml/Groups/PublicSubnet.puml
+!include AWSPuml/Groups/PrivateSubnet.puml
+!include AWSPuml/NetworkingContentDelivery/VPCNATGateway.puml
+!include AWSPuml/NetworkingContentDelivery/Route53.puml
+!include AWSPuml/NetworkingContentDelivery/Route53RouteTable.puml
+!include AWSPuml/NetworkingContentDelivery/VPCInternetGateway.puml
+!include AWSPuml/NetworkingContentDelivery/ElasticLoadBalancing.puml
+!include AWSPuml/Groups/AutoScalingGroup.puml
+!include AWSPuml/Groups/EC2InstanceContents.puml
+!include AWSPuml/Groups/Generic.puml
+!include AWSPuml/Database/RDS.puml
+!include DEVICONS/mysql.puml
+!include AWSPuml/General/Users.puml
+!include AWSPuml/General/Internet.puml
+
+hide stereotype
+skinparam linetype ortho
+
+Users(sources, "Events", "millions of users")
+Internet(net,"Internet","Network")
+AWSCloudGroup(cloud) {
+  VPCGroup(vpc){
+  VPCInternetGateway(IGW,"Internet GW","net GW")
+  AvailabilityZoneGroup(az_1,"us-east-2a"){
+
+    PublicSubnetGroup(p_subnet_2a,"Public subnet"){
+        Route53RouteTable(Rt_pub_a,"Route table","Public A")
+        VPCNATGateway(NAT_gw_a,"NAT Gateway","NAT Gateway A")
+        EC2ElasticIPAddress(EIP_a,"EIP","Elastic IP")
+    }
+    PrivateSubnetGroup(pvt_subnet_2a,"Private subnet"){
+    Route53RouteTable(Rt_pvt_a,"Route table","Private A")
+    }
+
+  }
+  AvailabilityZoneGroup(az_2,"us-east-2b"){
+    PublicSubnetGroup(p_subnet_2b,"Public subnet"){
+        Route53RouteTable(Rt_pub_b,"Route table","Public B")
+        VPCNATGateway(NAT_gw_b,"NAT Gateway","NAT Gateway B")
+        EC2ElasticIPAddress(EIP_b,"EIP","Elastic IP")
+    }
+    PrivateSubnetGroup(pvt_subnet_2b,"Private subnet"){
+    Route53RouteTable(Rt_pvt_b,"Route table","Private B")
+    }
+
+    }
+  }
+}
+
+Rel_D(sources,net,"use","use")
+Rel_D(net,IGW,"use","use")
+net .[hidden].> IGW
+
+az_1 .[hidden]R.> az_2
+Rel_U(Rt_pvt_a,NAT_gw_a,"use","use")
+Rel(EIP_a,Rt_pub_a,"route","use")
+Rel_U(NAT_gw_a,EIP_a,"use","use")
+Rel_U(EIP_a,IGW,"use","use")
+
+
+
+Rel_U(Rt_pvt_b,NAT_gw_b,"use","use")
+Rel(EIP_b,Rt_pub_b,"route","use")
+Rel_U(NAT_gw_b,EIP_b,"use","use")
+Rel_U(EIP_b,IGW,"use","use")
+@enduml
